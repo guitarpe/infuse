@@ -1,0 +1,22 @@
+[
+  {
+    "pedido": {
+      "cliente": 3,
+      "controle": 789,
+      "produto": "produto 3",
+      "valor": 11.5,
+      "quantidade": 10,
+      "cadastro": ""
+    }
+  },
+  {
+    "pedido": {
+      "cliente": 4,
+      "controle": 101112,
+      "produto": "produto 4",
+      "valor": 12.2,
+      "quantidade": 7,
+      "cadastro": "2024-04-10'T'10:30:30"
+    }
+  }
+]
