@@ -12,9 +12,9 @@ spring:
   application:
     name: diploma-digital
   datasource:
-    url: jdbc:mysql://localhost:3306/guitarpedb
-    username: guitarpe
-    password: Pez@1881
+    url: jdbc:mysql://sqlexpress.crkmqi2w23yz.sa-east-1.rds.amazonaws.com:3306/dbtest
+    username: admin
+    password: PezA2611
     jpa:
       hibernate:
         ddl-auto: update

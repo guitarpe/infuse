@@ -14,7 +14,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
-@Table(name="TB_LOGS", schema="dbo")
+@Table(name="TB_LOGS")
 public class Logs implements Serializable {
 	
 	@Id

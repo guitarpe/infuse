@@ -14,7 +14,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
-@Table(name="TB_CLIENTS", schema="dbo")
+@Table(name="TB_CLIENTS")
 public class Clients implements Serializable {
 	
 	@Id
