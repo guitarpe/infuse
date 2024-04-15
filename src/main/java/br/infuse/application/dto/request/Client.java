@@ -4,18 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
-
 @Builder
 @Data
-public class ClientDTO {
+public class Client {
 
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("nome")
+    @JsonProperty("name")
     private String nmClient;
 
-    @JsonProperty("cadastro")
-    private Date dtRegister;
+    @JsonProperty("register")
+    private String dtRegister;
 }

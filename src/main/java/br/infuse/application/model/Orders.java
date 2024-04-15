@@ -1,5 +1,6 @@
 package br.infuse.application.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -17,37 +18,43 @@ import java.util.Objects;
 @AllArgsConstructor
 @Table(name="TB_ORDERS")
 public class Orders implements Serializable {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", nullable = false)
-	private Long id;
+	@Column(name = "NUM_CONTROL", nullable=false)
+	@JsonProperty("control")
+	private Long numControl;
 
 	@Column(name = "CLIENT_ID", nullable=false)
+	@JsonProperty("client")
 	private Long clientId;
-
-	@Column(name = "NUM_CONTROL", nullable=false)
-	private Long numControl;
 	
 	@Column(name = "NM_PRODUCT", nullable=false)
+	@JsonProperty("name_product")
 	private String nmProduct;
 
 	@Column(name = "VL_PRODUCT", nullable=false)
-	private long vlProduct;
+	@JsonProperty("value_product")
+	private double vlProduct;
 
 	@Column(name = "AMOUNT_ORDER")
+	@JsonProperty("client")
 	private int amountOrder;
 
 	@Column(name = "PERCENT_DISCOUNT")
+	@JsonProperty("percent_discount")
 	private Double percentDiscount;
 
 	@Column(name = "VL_DISCOUNT")
+	@JsonProperty("value_discount")
 	private Double vlDiscount;
 
 	@Column(name = "VL_ORDER", nullable=false)
+	@JsonProperty("value_order")
 	private Double vlOrder;
 
 	@Column(name = "DT_REGISTER", columnDefinition = "TIMESTAMP")
+	@JsonProperty("register")
 	private LocalDateTime dtRegister;
 
 	@Override
@@ -55,7 +62,7 @@ public class Orders implements Serializable {
 		if (this == o) return true;
 		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
 		Orders that = (Orders) o;
-		return id != null && Objects.equals(id, that.id);
+		return numControl != null && Objects.equals(numControl, that.numControl);
 	}
 
 	@Override

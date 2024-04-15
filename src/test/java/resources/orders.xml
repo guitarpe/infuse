@@ -1,18 +1,18 @@
-<pedidos>
-    <pedido>
-        <cliente>1</cliente>
-        <controle>123</controle>
-        <produto>produto 1</produto>
-        <valor>10.0</valor>
-        <quantidade>6</quantidade>
-        <cadastro>2024-04-10'T'10:30:30</cadastro>
-    </pedido>
-    <pedido>
-        <cliente>2</cliente>
-        <controle>456</controle>
-        <produto>produto 2</produto>
-        <valor>11.0</valor>
-        <quantidade>11</quantidade>
-        <cadastro></cadastro>
-    </pedido>
-</pedidos>
+<orders>
+    <order>
+        <client>1</client>
+        <control>123</control>
+        <product>produto 1</product>
+        <value>10.0</value>
+        <amount>6</amount>
+        <register>2024-04-10 10:30:30</register>
+    </order>
+    <order>
+        <client>2</client>
+        <control>456</control>
+        <product>produto 2</product>
+        <value>11.0</value>
+        <amount>11</amount>
+        <register></register>
+    </order>
+</orders>

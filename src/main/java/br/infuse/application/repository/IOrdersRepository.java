@@ -12,14 +12,14 @@ import java.util.Optional;
 
 @Repository
 public interface IOrdersRepository extends JpaRepository<Orders, Long> {
-	Orders findByNumControl(Long numControl);
+	Optional<Orders> findByNumControl(Long numControl);
 
 	@Query("select o from Orders o where o.numControl=:control or o.dtRegister=:register " +
 			"or o.amountOrder=:amount or o.vlProduct=:vproduct or o.nmProduct=:nproduct or o.clientId=:client")
 	List<Orders> searchOrders(@Param("control") Long numControl,
 							   @Param("register") LocalDateTime dtRegister,
 							   @Param("amount") Integer amountOrder,
-							   @Param("vproduct") Long vlProduct,
+							   @Param("vproduct") Double vlProduct,
 							   @Param("nproduct") String nmProduct,
 							   @Param("client") Long clientId);
 }

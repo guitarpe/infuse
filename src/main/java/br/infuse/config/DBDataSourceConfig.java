@@ -21,41 +21,41 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "lyceumEntityManagerFactory",
-        transactionManagerRef = "lyceumTransactionManager",
-        basePackages = {"br.infuse.core.repository.lyceum"})
+        entityManagerFactoryRef = "entityManagerFactory",
+        transactionManagerRef = "transactionManager",
+        basePackages = {"br.infuse.application.repository"})
 public class DBDataSourceConfig {
-    @Bean(name = "lyceumDataSourceProperties")
-    @ConfigurationProperties(prefix = "spring.datasource-lyceum")
-    public DataSourceProperties lyceumDataSourceProperties() {
+    @Bean(name = "dataSourceProperties")
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSourceProperties dataSourceProperties() {
         return new DataSourceProperties();
     }
 
-    @Bean(name = "lyceumDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource-lyceum.configuration")
-    public DataSource lyceumDataSource(@Qualifier("lyceumDataSourceProperties") DataSourceProperties lyceumDataSourceProperties) {
-        return lyceumDataSourceProperties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    @Bean(name = "dataSourceDb")
+    @ConfigurationProperties(prefix = "spring.datasource.configuration")
+    public DataSource dataSourceDb(@Qualifier("dataSourceProperties") DataSourceProperties dataSourceProperties) {
+        return dataSourceProperties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
-    @Bean(name = "lyceumEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean lyceumEntityManagerFactory(
-            EntityManagerFactoryBuilder lyceumEntityManagerFactoryBuilder, @Qualifier("lyceumDataSource") DataSource lyceumDataSource) {
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            EntityManagerFactoryBuilder entityManagerFactoryBuilder, @Qualifier("dataSourceDb") DataSource dataataSource) {
 
-        Map<String, String> lyceumJpaProperties = new HashMap<>();
-        lyceumJpaProperties.put("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect");
+        Map<String, String> jpaProperties = new HashMap<>();
+        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 
-        return lyceumEntityManagerFactoryBuilder
-                .dataSource(lyceumDataSource)
-                .packages("br.infuse.core.model.lyceum")
-                .persistenceUnit("lyceumDataSource")
-                .properties(lyceumJpaProperties)
+        return entityManagerFactoryBuilder
+                .dataSource(dataataSource)
+                .packages("br.infuse.application.model")
+                .persistenceUnit("dataSourceDb")
+                .properties(jpaProperties)
                 .build();
     }
 
-    @Bean(name = "lyceumTransactionManager")
-    public PlatformTransactionManager lyceumTransactionManager(
-            @Qualifier("lyceumEntityManagerFactory") EntityManagerFactory lyceumEntityManagerFactory) {
+    @Bean(name = "transactionManager")
+    public PlatformTransactionManager transactionManager(
+            @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
 
-        return new JpaTransactionManager(lyceumEntityManagerFactory);
+        return new JpaTransactionManager(entityManagerFactory);
     }
 }

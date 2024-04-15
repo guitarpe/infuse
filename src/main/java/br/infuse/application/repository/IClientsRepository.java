@@ -7,11 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IClientsRepository extends JpaRepository<Clients, Long> {
-	Clients findByClientId(Long clientId);
-	Clients findByNmClient(String name);
+	Optional<Clients> findByClientId(Long clientId);
+
+	Optional<Clients> findByNmClient(String name);
+
 	@Query("select c from Clients c where c.clientId=:id or c.nmClient=:name")
 	List<Clients> searchClients(@Param("id") Long id,
 							   @Param("name") String name);

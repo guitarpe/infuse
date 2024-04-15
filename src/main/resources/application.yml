@@ -1,7 +1,7 @@
 #servidor
 server:
   host: localhost
-  port: 8082
+  port: 8080
 
 aplicacao:
   versao: 1.1
@@ -41,12 +41,12 @@ feign:
     enabled: true
 
 #autenticacao OAuth2
-security:
-  oauth2:
-    client:
-      scope: password
-      client-id: 607c6765-d6c9-4c20-a4ff-c373a3d50794
-      client-secret: 5eabc608-8003-4105-8ed1-5cc45c7c5eb8
+#security:
+#  oauth2:
+#    client:
+#      scope: password
+#      client-id: 607c6765-d6c9-4c20-a4ff-c373a3d50794
+#      client-secret: 5eabc608-8003-4105-8ed1-5cc45c7c5eb8
 
 #LOGGING
 logging:

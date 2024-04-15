@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SuccessResponse {
     private long code;
-    private boolean sucesso;
+    private boolean success;
 	private LocalDateTime timestamp;
     private String message;
     private Object data;
