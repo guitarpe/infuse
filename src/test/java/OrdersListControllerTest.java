@@ -18,8 +18,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 
-import org.springframework.http.HttpHeaders;
-
 import javax.persistence.EntityNotFoundException;
 import java.io.InputStream;
 import java.util.List;
