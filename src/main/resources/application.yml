@@ -10,7 +10,7 @@ aplicacao:
 #Spring
 spring:
   application:
-    name: diploma-digital
+    name: ordering-system
   datasource:
     url: jdbc:mysql://sqlexpress.crkmqi2w23yz.sa-east-1.rds.amazonaws.com:3306/dbtest
     username: admin
