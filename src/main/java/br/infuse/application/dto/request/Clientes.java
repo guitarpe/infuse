@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class OrderRoot {
-    @JsonProperty("orders")
-    public OrdersList ordersList;
+public class Clientes {
+    @JsonProperty("clientes")
+    public List<Cliente> clientes;
 }

@@ -6,8 +6,8 @@ Juntamente com o serviço de pedidos também foi criado endpoints para cadastro 
 
 ### Endponts disponíveis:
 
-- Registro de Pedidos - POST- http://localhost:8080/api/orders/receive
-- Consulta de Pedidos - POST - http://localhost:8080/api/orders/consult
+- Registro de Pedidos - POST- http://localhost:8080/api/pedidos/receive
+- Consulta de Pedidos - POST - http://localhost:8080/api/pedidos/consult
 - Registro de Clientes - POST - http://localhost:8080/api/clients/register
 - Consulta de Clientes - POST - http://localhost:8080/api/clients/consult
 

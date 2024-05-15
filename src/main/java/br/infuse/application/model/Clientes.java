@@ -15,7 +15,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @Table(name="TB_CLIENTS")
-public class Clients implements Serializable {
+public class Clientes implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Clients implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-		Clients that = (Clients) o;
+		Clientes that = (Clientes) o;
 		return clientId != null && Objects.equals(clientId, that.clientId);
 	}
 

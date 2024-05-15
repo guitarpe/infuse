@@ -21,8 +21,6 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "entityManagerFactory",
-        transactionManagerRef = "transactionManager",
         basePackages = {"br.infuse.application.repository"})
 public class DBDataSourceConfig {
     @Bean(name = "dataSourceProperties")

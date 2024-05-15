@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Utils {
 
-    public static LocalDateTime convertDtString(String date){
+    public static LocalDateTime converterDataString(String date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         return LocalDateTime.parse(date, formatter);
@@ -21,7 +21,7 @@ public class Utils {
         return now.format(formatter);
     }
 
-    public static boolean verifyEmptyOrNull(Object val){
+    public static boolean verificarVazioOuNulo(Object val){
         if(Objects.isNull(val) || Strings.isEmpty(val.toString())){
             return false;
         }else{

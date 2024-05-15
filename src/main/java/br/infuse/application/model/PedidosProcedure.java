@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "AMOUNT_ORDER", type = Integer.class),
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "REGISTER", type = LocalDateTime.class)
         })
-public class OrdersProcedure {
+public class PedidosProcedure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column

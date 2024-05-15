@@ -6,14 +6,14 @@ import lombok.Data;
 
 @Builder
 @Data
-public class Client {
+public class Cliente {
 
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("name")
-    private String nmClient;
+    @JsonProperty("nome")
+    private String nome;
 
-    @JsonProperty("register")
-    private String dtRegister;
+    @JsonProperty("registro")
+    private String dtRegistro;
 }

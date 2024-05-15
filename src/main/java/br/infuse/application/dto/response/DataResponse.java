@@ -1,7 +1,6 @@
 package br.infuse.application.dto.response;
 
-import br.infuse.application.dto.request.Client;
-import br.infuse.application.dto.request.Order;
+import br.infuse.application.dto.request.Pedido;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +16,5 @@ public class DataResponse {
     @JsonProperty("ordersExists")
     List<String> controls = new ArrayList<>();
     @JsonProperty("ordersAdd")
-    List<Order> listOrders = new ArrayList<>();
+    List<Pedido> listPedidos = new ArrayList<>();
 }

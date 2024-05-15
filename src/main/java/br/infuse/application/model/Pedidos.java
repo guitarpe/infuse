@@ -7,7 +7,6 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +16,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @Table(name="TB_ORDERS")
-public class Orders implements Serializable {
+public class Pedidos implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +60,7 @@ public class Orders implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-		Orders that = (Orders) o;
+		Pedidos that = (Pedidos) o;
 		return numControl != null && Objects.equals(numControl, that.numControl);
 	}
 

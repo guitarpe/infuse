@@ -1,6 +1,7 @@
 package br.infuse.application.enuns;
 
-public enum MessageSystem {
+public enum Mensagens {
+    SUCCESS_MSG_IMPORT_FILE("Arquivo importado com sucesso"),
     ERROR_INVALID_FILE("Arquivo inválido"),
     ERROR_READ_JSON_FILE("Erro ao ler o arquivo JSON"),
     ERROR_READ_XML_FILE("Erro ao ler o arquivo XML"),
@@ -25,11 +26,12 @@ public enum MessageSystem {
     SUCCESS_SAVE_ORDER("Pedidos salvo com sucesso"),
     SUCCESS_SAVE_CLIENT("Clientes salvo com sucesso"),
     SUCCESS_LIST_ORDERS("Pedidos listados com sucesso"),
-    SUCCESS_LIST_CLIENTS("Pedidos listados com sucesso");
+    SUCCESS_LIST_CLIENTS("Clientes listados com sucesso"),
+    ERROR_MSG_NO_PARAMS("Pelo menos um parâmetro 'nome' ou 'id' deve ser fornecido.");
 
     private final String value;
 
-    MessageSystem(String v) {
+    Mensagens(String v) {
         value = v;
     }
 
@@ -37,8 +39,8 @@ public enum MessageSystem {
         return value;
     }
 
-    public static MessageSystem fromValue(String v) {
-        for (MessageSystem c: MessageSystem.values()) {
+    public static Mensagens fromValue(String v) {
+        for (Mensagens c: Mensagens.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

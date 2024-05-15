@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ClientsList {
-    @JsonProperty("clients")
-    public List<Client> clients;
+public class Pedidos {
+    @JsonProperty("pedidos")
+    public List<Pedido> pedidos;
 }
