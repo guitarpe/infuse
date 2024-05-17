@@ -23,6 +23,7 @@ public enum Mensagens {
     ERROR_CLIENT_EXISTS("Cliente já cadastrado"),
     ERROR_NOT_CLIENT_SAVE("Nenhum cliente foi salvo, verifique os dados de entrada"),
     NOT_SAVE_ORDERS("Nenhum pedido foi salvo, verifique os dados de entrada"),
+    ERROR_FILE_TEST("ArquivO de teste não encontrado"),
     SUCCESS_SAVE_ORDER("Pedidos salvo com sucesso"),
     SUCCESS_SAVE_CLIENT("Clientes salvo com sucesso"),
     SUCCESS_LIST_ORDERS("Pedidos listados com sucesso"),

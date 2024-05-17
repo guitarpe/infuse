@@ -49,9 +49,9 @@ public class PedidosService{
 
                 if (cliente.isPresent() && !pedido.isPresent()) {
                     if(!Utils.verificarVazioOuNulo(order.getDtRegistro())) {
-                        dataHoje = Utils.converterDataString(order.getDtRegistro());
-                    }else{
                         order.setDtRegistro(Utils.pegarDataAtual());
+                    }else{
+                        dataHoje = Utils.converterDataString(order.getDtRegistro());
                     }
 
                     procedure.procRegisterOrders(order.getClientId(), order.getControle(),

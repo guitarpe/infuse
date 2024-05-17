@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,14 +32,14 @@ public class PedidosController {
     @Autowired
     private ArquivosService arquivoService;
 
-    @PostMapping(value="/cadastrar",
+    @PostMapping(value="/receber",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Pedidos registrados com sucesso"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> cadastrar(@RequestParam("arquivo") MultipartFile arquivo) {
+    public ResponseEntity<SuccessResponse> receber(@RequestParam("arquivo") MultipartFile arquivo) {
 
         if(arquivoService.checkTipoDocument(arquivo) < 1)
             throw new EntityNotFoundException(Mensagens.ERROR_INVALID_FILE.value());

@@ -13,9 +13,9 @@ public interface IPedidosProcedureRepository extends JpaRepository<PedidosProced
 
     @Procedure(name = "OrdersProcedure.ProcRegisterOrders")
     void procRegisterOrders(@Param("CLIENT") long client,
-                            @Param("NUM_CONTROL") long control,
-                            @Param("NM_PRODUCT") String product,
-                            @Param("VL_PRODUCT") double value,
-                            @Param("AMOUNT_ORDER") int amount,
+                            @Param("CONTROL") long control,
+                            @Param("PRODUCT") String product,
+                            @Param("V_PRODUCT") double value,
+                            @Param("AMOUNT") int amount,
                             @Param("REGISTER") LocalDateTime register);
 }

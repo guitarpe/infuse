@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
         procedureName = "PROC_REGISTER_ORDERS",
         parameters = {
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "CLIENT", type = Long.class),
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "NUM_CONTROL", type = Long.class),
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "NM_PRODUCT", type = String.class),
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "VL_PRODUCT", type = Double.class),
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "AMOUNT_ORDER", type = Integer.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "CONTROL", type = Long.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "PRODUCT", type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "V_PRODUCT", type = Double.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "AMOUNT", type = Integer.class),
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "REGISTER", type = LocalDateTime.class)
         })
 public class PedidosProcedure {
