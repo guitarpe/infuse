@@ -5,7 +5,7 @@
         <produto>produto 1</produto>
         <valor>10.0</valor>
         <quantidade>6</quantidade>
-        <registro>2024-04-10 10:30:30</registro>
+        <registro>2024-04-10</registro>
     </pedido>
     <pedido>
         <cliente>2</cliente>

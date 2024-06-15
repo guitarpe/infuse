@@ -4,40 +4,51 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+
 @Entity
-@Data
+@Getter
+@Setter
 @ToString
 @RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
 @Table(name="TB_CLIENTS")
-public class Clientes implements Serializable {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", nullable = false)
-	private Long clientId;
-	
-	@Column(name = "NM_CLIENT", nullable=false)
-	private String nmClient;
-	
-	@Column(name = "DT_REGISTER", columnDefinition = "TIMESTAMP")
-	private LocalDateTime dtRegister;
+public class Clientes {
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-		Clientes that = (Clientes) o;
-		return clientId != null && Objects.equals(clientId, that.clientId);
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
+    private Long id;
 
-	@Override
-	public int hashCode() {
-		return getClass().hashCode();
-	}
+    @Column(name = "NM_CLIENT", nullable = false)
+    private String nomeCliente;
+
+    @Column(name = "EMAIL_CLIENT", nullable = false)
+    private String emailClient;
+
+    @Column(name = "PHONE_CLIENT", nullable = false)
+    private String phoneClient;
+
+    @Column(name = "DT_REGISTER", columnDefinition = "TIMESTAMP")
+    private LocalDateTime dtRegistro;
+
+    @Column(name = "DT_UPDATE")
+    private LocalDateTime dtUpdate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Clientes clientes = (Clientes) o;
+        return id != null && Objects.equals(id, clientes.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

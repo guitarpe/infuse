@@ -1,9 +1,8 @@
 package br.infuse.application.controller;
 
-import br.infuse.application.dto.request.Clientes;
+import br.infuse.application.dto.request.ClienteDTO;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.dto.response.SuccessResponse;
-import br.infuse.application.enuns.Mensagens;
 import br.infuse.application.service.ClientesService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -18,13 +17,13 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api")
 public class ClientesController {
 
     @Autowired
     private ClientesService service;
 
-    @GetMapping(value="/consultar",
+    @GetMapping(value="/clientes",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
 
@@ -33,13 +32,11 @@ public class ClientesController {
             @ApiResponse(code = 404, message = "Cliente não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> consultar(@RequestParam(value = "nome", required = false) String nome,
-                                                     @RequestParam(value = "id", required = false) Long id) {
-        if (nome == null && id == null) {
-            throw new IllegalArgumentException(Mensagens.ERROR_MSG_NO_PARAMS.value());
-        }
+    public ResponseEntity<SuccessResponse> clientes(
+            @RequestParam(value="page", defaultValue="0", required=false) int page,
+            @RequestParam(value="size", defaultValue="10", required=false) int size) {
 
-        ServiceResponse retorno = service.consultarClientes(nome, id);
+        ServiceResponse retorno = service.consultarClientes(page, size);
 
         if(!retorno.isStatus()) {
             throw new EntityNotFoundException(retorno.getMensagem());
@@ -53,15 +50,81 @@ public class ClientesController {
                 .data(retorno.getDados()).build());
     }
 
-    @PostMapping(value="/cadastrar",
+    @GetMapping(value="/clientes/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Cliente recuperado com sucesso"),
+            @ApiResponse(code = 404, message = "Cliente não encontrado"),
+            @ApiResponse(code = 500, message = "Erro interno do servidor")
+    })
+    public ResponseEntity<SuccessResponse> cliente(@PathVariable long id) {
+        ServiceResponse retorno = service.consultarClientePorId(id);
+
+        if(!retorno.isStatus()) {
+            throw new EntityNotFoundException(retorno.getMensagem());
+        }
+
+        return ResponseEntity.ok().body(SuccessResponse.builder()
+                .code(200)
+                .success(true)
+                .timestamp(LocalDateTime.now())
+                .message(retorno.getMensagem())
+                .data(retorno.getDados()).build());
+    }
+
+    @PostMapping(value="/clientes/registrar",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Cliente registrado com sucesso"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> cadastrar(@RequestBody Clientes clientes) {
-        ServiceResponse retorno = service.cadastrarClientes(clientes);
+    public ResponseEntity<SuccessResponse> registrar(@RequestBody ClienteDTO cliente) {
+        ServiceResponse retorno = service.cadastrarClientes(cliente);
+
+        if(!retorno.isStatus()) {
+            throw new EntityNotFoundException(retorno.getMensagem());
+        }
+
+        return ResponseEntity.ok().body(SuccessResponse.builder()
+                .code(200)
+                .success(true)
+                .timestamp(LocalDateTime.now())
+                .message(retorno.getMensagem())
+                .data(retorno.getDados()).build());
+    }
+
+    @PutMapping("/clientes/{id}/atualizar")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Cliente atualizado com sucesso"),
+            @ApiResponse(code = 500, message = "Erro interno do servidor")
+    })
+    public ResponseEntity<SuccessResponse> atualizar(@RequestBody ClienteDTO cliente,
+                                                     @PathVariable("id") long id) {
+        ServiceResponse retorno = service.atualizarClientes(cliente, id);
+
+        if(!retorno.isStatus()) {
+            throw new EntityNotFoundException(retorno.getMensagem());
+        }
+
+        return ResponseEntity.ok().body(SuccessResponse.builder()
+                .code(200)
+                .success(true)
+                .timestamp(LocalDateTime.now())
+                .message(retorno.getMensagem())
+                .data(retorno.getDados()).build());
+    }
+
+    @DeleteMapping("/clientes/{id}/deletar")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Cliente deletado com sucesso"),
+            @ApiResponse(code = 500, message = "Erro interno do servidor")
+    })
+    public ResponseEntity<SuccessResponse> deletar(@PathVariable("id") long id) {
+
+        ServiceResponse retorno = service.deletarClientes(id);
 
         if(!retorno.isStatus()) {
             throw new EntityNotFoundException(retorno.getMensagem());

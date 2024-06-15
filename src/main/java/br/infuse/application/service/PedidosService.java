@@ -1,100 +1,223 @@
 package br.infuse.application.service;
 
-import br.infuse.application.dto.request.Pedido;
-import br.infuse.application.dto.response.DataResponse;
+import br.infuse.application.dto.request.PedidoDTO;
+import br.infuse.application.dto.response.PedidosRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
-import br.infuse.application.model.Clientes;
+import br.infuse.application.exception.CustomNotFoundException;
 import br.infuse.application.model.Pedidos;
-import br.infuse.application.repository.IClientesRepository;
-import br.infuse.application.repository.IPedidosProcedureRepository;
 import br.infuse.application.repository.IPedidosRepository;
 import br.infuse.application.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PedidosService{
+public class PedidosService {
 
-    private final IPedidosRepository pedidos;
-    private final IPedidosProcedureRepository procedure;
-    private final IClientesRepository clientes;
+    private final IPedidosRepository repository;
 
-    public ServiceResponse cadastrarPedido(List<Pedido> lista) {
-        String mensagem = Mensagens.SUCCESS_SAVE_ORDER.value();
-        DataResponse retData = new DataResponse();
+    public ServiceResponse cadastrarPedido(List<PedidoDTO> lista) {
+        String mensagem = Mensagens.ORDER_SUCCESS_SAVE.value();
+        List<PedidoDTO> pedidos = new ArrayList<>();
         boolean status = true;
 
         try {
-            lista.forEach(order -> {
-                LocalDateTime dataHoje = LocalDateTime.now();
+            lista.forEach(objeto -> {
 
-                Optional<Clientes> cliente = clientes.findByClientId(order.getClientId());
-                Optional<Pedidos> pedido = pedidos.findByNumControl(order.getControle());
+                int count = repository.countByControle(objeto.getControle());
 
-                if (!cliente.isPresent())
-                    retData.getClients().add(order.getClientId().toString());
+                if(count < 1){
+                    LocalDate dataHoje;
+                    BigDecimal percDiscount = BigDecimal.ZERO;
+                    BigDecimal vOrder;
+                    BigDecimal vTotal = objeto.getValor().multiply(BigDecimal.valueOf(objeto.getQuantidade()));
 
-                if (pedido.isPresent())
-                    retData.getControls().add(order.getControle().toString());
-
-                if (cliente.isPresent() && !pedido.isPresent()) {
-                    if(!Utils.verificarVazioOuNulo(order.getDtRegistro())) {
-                        order.setDtRegistro(Utils.pegarDataAtual());
-                    }else{
-                        dataHoje = Utils.converterDataString(order.getDtRegistro());
+                    if (Utils.verificarVazioOuNulo(objeto.getDtRegistro())) {
+                        dataHoje = Utils.stringToLocalDate(Utils.pegarDataAtual());
+                    } else {
+                        dataHoje = Utils.stringToLocalDate(objeto.getDtRegistro());
                     }
 
-                    procedure.procRegisterOrders(order.getClientId(), order.getControle(),
-                            order.getProduto(), order.getValor(), order.getQuantidade(), dataHoje);
+                    Pedidos pedido = new Pedidos();
+                    pedido.setControle(objeto.getControle());
+                    pedido.setDtRegistro(dataHoje);
 
-                    retData.getListPedidos().add(order);
+                    vOrder = getDiscountOrder(objeto, percDiscount, vTotal, pedido);
+
+                    pedido.setVlPedido(vOrder);
+
+                    repository.save(pedido);
+
+                    pedidos.add(objeto);
                 }
             });
-
-            if(retData.getListPedidos().isEmpty()){
-                mensagem = Mensagens.NOT_SAVE_ORDERS.value();
-            }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             status = false;
-            mensagem = Mensagens.ERROR_SAVE_ORDER.value() + ex.getMessage();
+            mensagem = ex.getMessage();
         }
 
         return ServiceResponse.builder()
                 .status(status)
                 .mensagem(mensagem)
-                .dados(retData).build();
+                .dados(pedidos).build();
     }
 
-    public ServiceResponse consultarPedido(Long pedido, LocalDate registro, Long cliente,
-                                           String produto, Double valor, Integer qtde) {
-        List<Pedidos> lista = new ArrayList<>();
-        String mensagem = Mensagens.SUCCESS_LIST_ORDERS.value();
+    public ServiceResponse atualizarPedido(PedidoDTO objeto, Long controle) {
+        String mensagem = Mensagens.ORDER_SUCCESS_UPDT.value();
+        List<PedidoDTO> pedidos = new ArrayList<>();
         boolean status = true;
 
-        try{
-            lista = pedidos.searchOrders(pedido, registro, qtde, valor, produto, cliente);
+        try {
+            LocalDate dataHoje;
+            BigDecimal percDiscount = BigDecimal.ZERO;
+            BigDecimal vOrder;
+            BigDecimal vTotal = objeto.getValor().multiply(BigDecimal.valueOf(objeto.getQuantidade()));
 
-            if(lista.isEmpty())
-                throw new EntityNotFoundException(Mensagens.ERROR_LIST_NOT_FOUND.value());
+            dataHoje = Utils.stringToLocalDate(Utils.pegarDataAtual());
 
-        }catch (Exception ex){
+            Pedidos pedido = repository.findByControle(controle)
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.ORDER_ERROR_FOUND.value()));
+
+            vOrder = getDiscountOrder(objeto, percDiscount, vTotal, pedido);
+            pedido.setDtUpdate(dataHoje);
+            pedido.setVlPedido(vOrder);
+
+            Pedidos pedidoUpdt = repository.save(pedido);
+
+            pedidos.add(mapToDto(pedidoUpdt));
+
+        } catch (Exception ex) {
             status = false;
-            mensagem = Mensagens.ERROR_LIST_ORDERS.value()+ex.getMessage();
+            mensagem = ex.getMessage();
         }
 
         return ServiceResponse.builder()
                 .status(status)
                 .mensagem(mensagem)
-                .dados(lista).build();
+                .dados(pedidos).build();
+    }
+
+    public ServiceResponse consultarPedidoPorId(Long controle) {
+        List<PedidoDTO> pedidos = new ArrayList<>();
+        String mensagem = Mensagens.ORDER_SUCCESS_FOUND.value();
+        boolean status = true;
+
+        try {
+            Pedidos pedido = repository.findByControle(controle)
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.ORDER_ERROR_FOUND.value()));
+
+            pedidos.add(mapToDto(pedido));
+
+        } catch (Exception ex) {
+            status = false;
+            mensagem = ex.getMessage();
+        }
+
+        return ServiceResponse.builder()
+                .status(status)
+                .mensagem(mensagem)
+                .dados(pedidos).build();
+    }
+
+    public ServiceResponse consultarPedido(int page, int size, long pedido, LocalDate registro, Long cliente,
+                                           String produto, BigDecimal valor, Integer qtde) {
+        List<PedidoDTO> content;
+        String mensagem = Mensagens.ORDER_SUCCESS_LIST.value();
+        boolean status = true;
+
+        PedidosRespose pedidosResponse = new PedidosRespose();
+
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Pedidos> pedidos = repository.searchOrders(pedido, registro, qtde, valor, produto, cliente, pageable);
+            List<Pedidos> listOfPedidos = pedidos.getContent();
+            content = listOfPedidos.stream().map(this::mapToDto).collect(Collectors.toList());
+
+            if (content.isEmpty())
+                throw new EntityNotFoundException(Mensagens.ORDER_ERROR_LIST.value());
+
+            pedidosResponse.setContent(content);
+            pedidosResponse.setPageNo(pedidos.getNumber());
+            pedidosResponse.setPageSize(pedidos.getSize());
+            pedidosResponse.setTotalElements(pedidos.getTotalElements());
+            pedidosResponse.setTotalPages(pedidos.getTotalPages());
+            pedidosResponse.setLast(pedidos.isLast());
+
+        } catch (Exception ex) {
+            status = false;
+            mensagem = ex.getMessage();
+        }
+
+        return ServiceResponse.builder()
+                .status(status)
+                .mensagem(mensagem)
+                .dados(pedidosResponse).build();
+    }
+
+    public ServiceResponse deletarPedido(Long controle) {
+        String mensagem = Mensagens.ORDER_SUCCESS_DEL.value();
+        boolean status = true;
+
+        try {
+            Pedidos consulta = repository.findByControle(controle)
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.ORDER_ERROR_FOUND.value()));
+
+            repository.delete(consulta);
+
+        } catch (Exception ex) {
+            status = false;
+            mensagem = ex.getMessage();
+        }
+
+        return ServiceResponse.builder()
+                .status(status)
+                .mensagem(mensagem)
+                .dados(null).build();
+    }
+
+    private BigDecimal getDiscountOrder(PedidoDTO objeto, BigDecimal percDiscount, BigDecimal vTotal, Pedidos pedido) {
+        BigDecimal vDiscount;
+        BigDecimal vOrder;
+        if (objeto.getQuantidade() > 5 && objeto.getQuantidade() < 10) {
+            percDiscount = new BigDecimal("0.05");
+        } else if (objeto.getQuantidade() >= 10) {
+            percDiscount = new BigDecimal("0.10");
+        }
+
+        vDiscount = vTotal.multiply(percDiscount);
+        vOrder = vTotal.subtract(vDiscount);
+
+        pedido.setCliente(objeto.getClientId());
+        pedido.setNomeProduto(objeto.getProduto());
+        pedido.setVlProduto(objeto.getValor());
+        pedido.setQuantidade(objeto.getQuantidade());
+        pedido.setPercDesconto(percDiscount);
+        pedido.setVlDesconto(vDiscount);
+
+        return vOrder;
+    }
+
+    private PedidoDTO mapToDto(Pedidos pedido) {
+        return PedidoDTO.builder()
+                .controle(pedido.getControle())
+                .clientId(pedido.getCliente())
+                .produto(pedido.getNomeProduto())
+                .quantidade(pedido.getQuantidade())
+                .valor(pedido.getVlProduto())
+                .dtRegistro(Utils.dateToString(pedido.getDtRegistro())).build();
     }
 }

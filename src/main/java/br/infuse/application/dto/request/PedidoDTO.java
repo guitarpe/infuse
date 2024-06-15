@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pedido {
+public class PedidoDTO {
 
     @JsonProperty("cliente")
     private Long clientId;
@@ -22,7 +24,7 @@ public class Pedido {
     private String produto;
 
     @JsonProperty("valor")
-    private double valor;
+    private BigDecimal valor;
 
     @JsonProperty("quantidade")
     @Builder.Default

@@ -10,9 +10,12 @@ create table tb_orders
     VL_DISCOUNT      decimal  default 0                 null,
     VL_ORDER         decimal                            null,
     DT_REGISTER      datetime default CURRENT_TIMESTAMP not null,
+    DT_UPDATE        datetime                           null,
     constraint tb_orders_ID_uindex
         unique (ID),
     constraint tb_orders_NUM_CONTROL_uindex
         unique (NUM_CONTROL)
+    constraint tb_orders_CLIENT_ID_fk
+        foreign key (CLIENT_ID) references TB_CLIENTS(ID)
 );
 

@@ -6,11 +6,13 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
 @ToString
 @RequiredArgsConstructor
 @Builder
@@ -20,48 +22,54 @@ public class Pedidos implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private Long id;
+
 	@Column(name = "NUM_CONTROL", nullable=false)
 	@JsonProperty("control")
-	private Long numControl;
+	private Long controle;
 
 	@Column(name = "CLIENT_ID", nullable=false)
 	@JsonProperty("client")
-	private Long clientId;
+	private Long cliente;
 	
 	@Column(name = "NM_PRODUCT", nullable=false)
 	@JsonProperty("name_product")
-	private String nmProduct;
+	private String nomeProduto;
 
 	@Column(name = "VL_PRODUCT", nullable=false)
 	@JsonProperty("value_product")
-	private double vlProduct;
+	private BigDecimal vlProduto;
 
 	@Column(name = "AMOUNT_ORDER")
 	@JsonProperty("client")
-	private int amountOrder;
+	private int quantidade;
 
 	@Column(name = "PERCENT_DISCOUNT")
 	@JsonProperty("percent_discount")
-	private Double percentDiscount;
+	private BigDecimal percDesconto;
 
 	@Column(name = "VL_DISCOUNT")
 	@JsonProperty("value_discount")
-	private Double vlDiscount;
+	private BigDecimal vlDesconto;
 
 	@Column(name = "VL_ORDER", nullable=false)
 	@JsonProperty("value_order")
-	private Double vlOrder;
+	private BigDecimal vlPedido;
 
 	@Column(name = "DT_REGISTER", columnDefinition = "TIMESTAMP")
 	@JsonProperty("register")
-	private LocalDateTime dtRegister;
+	private LocalDate dtRegistro;
+
+	@Column(name = "DT_UPDATE")
+	private LocalDate dtUpdate;
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-		Pedidos that = (Pedidos) o;
-		return numControl != null && Objects.equals(numControl, that.numControl);
+		Pedidos pedidos = (Pedidos) o;
+		return controle != null && Objects.equals(controle, pedidos.controle);
 	}
 
 	@Override

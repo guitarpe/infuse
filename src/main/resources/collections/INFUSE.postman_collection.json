@@ -7,14 +7,195 @@
 	},
 	"item": [
 		{
-			"name": "Receber Pedidos",
+			"name": "Clientes - Cadastrar Cliente",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "multipart/form-data",
-						"uuid": "4ef1bc87-22b4-4998-a68a-a71e553030ef"
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"cliente 6\",\n    \"email\": \"cliente6@email.com\",\n    \"telefone\": \"(44) 00000-0000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/clientes/registrar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clientes",
+						"registrar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clientes - Atualizar Cliente",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"cliente 1 up\",\n    \"email\": \"cliente1@email.com\",\n    \"telefone\": \"(44) 00000-0000\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/clientes/1/atualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clientes",
+						"1",
+						"atualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clientes - Consultar Cliente",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/clientes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clientes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clientes - Listar Todos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/clientes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clientes - Deletar Cliente",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/clientes/6/deletar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"clientes",
+						"6",
+						"deletar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pedidos - Cadastrar Pedidos",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data"
 					}
 				],
 				"body": {
@@ -23,12 +204,12 @@
 						{
 							"key": "arquivo",
 							"type": "file",
-							"src": []
+							"src": "/Users/flaviosousa/Downloads/pedidos.xml"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/pedidos/receber",
+					"raw": "http://localhost:8080/api/pedidos/registrar",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -37,55 +218,14 @@
 					"path": [
 						"api",
 						"pedidos",
-						"receber"
+						"registrar"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Cadastrar Clientes",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"uuid": "54d05f39-cb11-4839-a021-0bd9831b3868"
-					},
-					{
-						"key": "Cache-Control",
-						"value": "no-cache",
-						"uuid": "72a9c954-ec6d-49da-a3d7-672f52fd414f"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"clientes\": [\n        {\n            \"nome\": \"cliente 1\"\n        },\n        {\n            \"nome\": \"cliente 2\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/clientes/cadastrar",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"clientes",
-						"cadastrar"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Consultar Pedidos",
+			"name": "Pedidos - Consultar Pedidos",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -94,13 +234,11 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"uuid": "b6fb6177-3ac1-4add-9b72-08a7fcfd954d"
+						"value": "application/json"
 					},
 					{
 						"key": "Cache-Control",
-						"value": "no-cache",
-						"uuid": "dc39c59d-03bc-4efa-8b2a-93edc5e0d737"
+						"value": "no-cache"
 					}
 				],
 				"body": {
@@ -108,7 +246,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/pedidos/consultar?pedido=789&data=2024-04-10&qtde=1&valor=0.00&produto=produto%3&cliente=3",
+					"raw": "http://localhost:8080/api/pedidos?page=1&size=10&pedido=789&data=2024-04-10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -116,10 +254,17 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"pedidos",
-						"consultar"
+						"pedidos"
 					],
 					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
 						{
 							"key": "pedido",
 							"value": "789"
@@ -127,22 +272,6 @@
 						{
 							"key": "data",
 							"value": "2024-04-10"
-						},
-						{
-							"key": "qtde",
-							"value": "1"
-						},
-						{
-							"key": "valor",
-							"value": "0.00"
-						},
-						{
-							"key": "produto",
-							"value": "produto%3"
-						},
-						{
-							"key": "cliente",
-							"value": "3"
 						}
 					]
 				}
@@ -150,7 +279,7 @@
 			"response": []
 		},
 		{
-			"name": "Consultar Clientes",
+			"name": "Pedidos - Buscar Pedido",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -159,13 +288,11 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"uuid": "26da6ac4-3b48-46ad-a38a-25f7150a79d4"
+						"value": "application/json"
 					},
 					{
 						"key": "Cache-Control",
-						"value": "no-cache",
-						"uuid": "44621ac1-c4bb-4486-8693-9fc981d32f83"
+						"value": "no-cache"
 					}
 				],
 				"body": {
@@ -173,7 +300,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/clientes/consultar?nome=cliente%2&id=3",
+					"raw": "http://localhost:8080/api/pedidos/123",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -181,18 +308,78 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"clientes",
-						"consultar"
+						"pedidos",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pedidos - Atualizar Pedido",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cliente\": 3,\n    \"controle\": 789,\n    \"produto\": \"produto 3\",\n    \"valor\": 11.5,\n    \"quantidade\": 0,\n    \"registro\": \"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/pedidos/123/atualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
 					],
-					"query": [
-						{
-							"key": "nome",
-							"value": "cliente%2"
-						},
-						{
-							"key": "id",
-							"value": "3"
-						}
+					"port": "8080",
+					"path": [
+						"api",
+						"pedidos",
+						"123",
+						"atualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pedidos - Deletar Pedido",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/pedidos/123/deletar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"pedidos",
+						"123",
+						"deletar"
 					]
 				}
 			},

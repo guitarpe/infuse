@@ -11,11 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface IClientesRepository extends JpaRepository<Clientes, Long> {
-	Optional<Clientes> findByClientId(Long clientId);
+	Optional<Clientes> findByNomeCliente(String name);
 
-	Optional<Clientes> findByNmClient(String name);
-
-	@Query("select c from Clientes c where c.clientId = :id or c.nmClient like %:nome%")
+	@Query("select c from Clientes c where c.id = :id or c.nomeCliente like %:nome%")
 	List<Clientes> searchClients(@Param("id") Long id,
                                  @Param("nome") String nome);
 }

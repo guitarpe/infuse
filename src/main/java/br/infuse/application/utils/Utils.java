@@ -2,22 +2,27 @@ package br.infuse.application.utils;
 
 import org.apache.logging.log4j.util.Strings;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Utils {
 
-    public static LocalDateTime converterDataString(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static LocalDate stringToLocalDate(String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        return LocalDateTime.parse(date, formatter);
+        return LocalDate.parse(date, formatter);
     }
 
     public static String pegarDataAtual(){
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return now.format(formatter);
+    }
+
+    public static String dateToString(LocalDate now){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return now.format(formatter);
     }
 

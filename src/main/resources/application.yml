@@ -22,6 +22,8 @@ spring:
         hibernate:
           dialect: org.hibernate.dialect.MySQLDialect
           show_sql: true
+          format_sql: true
+          use_sql_comments: true
   servlet:
     multipart:
       max-file-size: 80MB
@@ -40,14 +42,6 @@ feign:
   okhttp:
     enabled: true
 
-#autenticacao OAuth2
-#security:
-#  oauth2:
-#    client:
-#      scope: password
-#      client-id: 607c6765-d6c9-4c20-a4ff-c373a3d50794
-#      client-secret: 5eabc608-8003-4105-8ed1-5cc45c7c5eb8
-
 #LOGGING
 logging:
   level:
@@ -56,3 +50,10 @@ logging:
     br.infuse: INFO
     org.springframework.web.client: INFO
     org.springframework.security.oauth2: INFO
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace

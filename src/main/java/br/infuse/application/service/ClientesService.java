@@ -1,82 +1,177 @@
 package br.infuse.application.service;
 
-import br.infuse.application.dto.request.Clientes;
-import br.infuse.application.dto.response.DataResponse;
+import br.infuse.application.dto.request.ClienteDTO;
+import br.infuse.application.dto.response.ClientesResponse;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
+import br.infuse.application.exception.CustomNotFoundException;
+import br.infuse.application.model.Clientes;
 import br.infuse.application.repository.IClientesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ClientesService {
 
-    private final IClientesRepository clientes;
+    private final IClientesRepository repository;
 
-    public ServiceResponse cadastrarClientes(Clientes lista) {
-        String mensagem = Mensagens.SUCCESS_SAVE_CLIENT.value();
-        DataResponse retData = new DataResponse();
+    public ServiceResponse cadastrarClientes(ClienteDTO objeto) {
+        String mensagem = Mensagens.CLIENT_SUCCESS_SAVE.value();
+        List<ClienteDTO> clientes = new ArrayList<>();
         boolean status = true;
 
         try {
-            List<Long> naoCadastrados = new ArrayList<>();
+            Clientes cliente = new Clientes();
+            cliente.setNomeCliente(objeto.getNome());
+            cliente.setEmailClient(objeto.getEmail());
+            cliente.setPhoneClient(objeto.getTelefone());
+            cliente.setDtRegistro(LocalDateTime.now());
 
-            lista.getClientes().forEach(client -> {
-                Optional<br.infuse.application.model.Clientes> consulta = clientes.findByNmClient(client.getNome());
+            repository.save(cliente);
 
-                if (!consulta.isPresent()) {
-                    clientes.save(br.infuse.application.model.Clientes.builder()
-                            .nmClient(client.getNome())
-                            .dtRegister(LocalDateTime.now())
-                            .build());
+            clientes.add(objeto);
 
-                    naoCadastrados.add(client.getId());
-                }
-            });
-
-            if(naoCadastrados.isEmpty()){
-                mensagem = Mensagens.ERROR_NOT_CLIENT_SAVE.value();
-            }
         } catch (Exception ex) {
             status = false;
-            mensagem = Mensagens.ERROR_SAVE_CLIENT.value() + ex.getMessage();
+            mensagem = Mensagens.CLIENT_ERROR_SAVE.value() + ex.getMessage();
+            log.error("Erro ao cadastrar clientes: {}", ex.getMessage(), ex);
         }
 
         return ServiceResponse.builder()
                 .status(status)
                 .mensagem(mensagem)
-                .dados(retData).build();
+                .dados(clientes).build();
     }
 
-    public ServiceResponse consultarClientes(String nome, Long id) {
-        List<br.infuse.application.model.Clientes> lista = new ArrayList<>();
-        String mensagem = Mensagens.SUCCESS_LIST_CLIENTS.value();
+    public ServiceResponse consultarClientePorId(Long id) {
+        String mensagem = Mensagens.CLIENT_SUCCESS_FOUND.value();
+        List<ClienteDTO> clientes = new ArrayList<>();
         boolean status = true;
 
         try {
-            lista = clientes.searchClients(id, nome);
+            Clientes cliente = repository.findById(id)
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.CLIENT_ERROR_FOUND.value()));
 
-            if (lista.isEmpty())
-                throw new EntityNotFoundException(Mensagens.ERROR_LIST_NOT_FOUND.value());
-
+            clientes.add(mapToDto(cliente));
         } catch (Exception ex) {
             status = false;
-            mensagem = Mensagens.ERROR_LIST_CLIENTS.value() + ex.getMessage();
+            mensagem = Mensagens.CLIENT_SUCCESS_FOUND.value() + ex.getMessage();
+            log.error("Erro ao consultar cliente: {}", ex.getMessage(), ex);
         }
 
         return ServiceResponse.builder()
                 .status(status)
                 .mensagem(mensagem)
-                .dados(lista).build();
+                .dados(clientes).build();
+    }
+
+    public ServiceResponse consultarClientes(int page, int size) {
+
+        List<ClienteDTO> content;
+
+        String mensagem = Mensagens.CLIENT_SUCCESS_LIST.value();
+        boolean status = true;
+
+        ClientesResponse clientesResponse = new ClientesResponse();
+
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Clientes> clientes = repository.findAll(pageable);
+            List<Clientes> listOfClientes = clientes.getContent();
+            content = listOfClientes.stream().map(this::mapToDto).collect(Collectors.toList());
+
+            if (content.isEmpty())
+                throw new EntityNotFoundException(Mensagens.CLIENT_ERROR_LIST.value());
+
+            clientesResponse.setContent(content);
+            clientesResponse.setPageNo(clientes.getNumber());
+            clientesResponse.setPageSize(clientes.getSize());
+            clientesResponse.setTotalElements(clientes.getTotalElements());
+            clientesResponse.setTotalPages(clientes.getTotalPages());
+            clientesResponse.setLast(clientes.isLast());
+
+        } catch (Exception ex) {
+            status = false;
+            mensagem = Mensagens.CLIENT_ERROR_LIST.value() + ex.getMessage();
+            log.error("Erro ao consultar clientes: {}", ex.getMessage(), ex);
+        }
+
+        return ServiceResponse.builder()
+                .status(status)
+                .mensagem(mensagem)
+                .dados(clientesResponse).build();
+    }
+
+    public ServiceResponse atualizarClientes(ClienteDTO objeto, Long id) {
+        String mensagem = Mensagens.CLIENT_SUCCESS_UPDT.value();
+        List<ClienteDTO> clientes = new ArrayList<>();
+        boolean status = true;
+
+        try {
+            Clientes cliente = repository.findById(id)
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.CLIENT_ERROR_UPDT.value()));
+
+            cliente.setNomeCliente(objeto.getNome());
+            cliente.setEmailClient(objeto.getEmail());
+            cliente.setPhoneClient(objeto.getTelefone());
+            cliente.setDtUpdate(LocalDateTime.now());
+
+            Clientes clienteUpdt = repository.save(cliente);
+
+            clientes.add(mapToDto(clienteUpdt));
+
+        } catch (Exception ex) {
+            status = false;
+            mensagem = Mensagens.CLIENT_ERROR_UPDT.value() + ex.getMessage();
+            log.error("Erro ao atualizar clientes: {}", ex.getMessage(), ex);
+        }
+
+        return ServiceResponse.builder()
+                .status(status)
+                .mensagem(mensagem)
+                .dados(clientes).build();
+    }
+
+    public ServiceResponse deletarClientes(Long id) {
+        String mensagem = Mensagens.CLIENT_SUCCESS_DEL.value();
+        boolean status = true;
+
+        try {
+            Clientes consulta = repository.findById(id)
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.CLIENT_ERROR_DEL.value()));
+
+            repository.delete(consulta);
+        } catch (Exception ex) {
+            status = false;
+            mensagem = Mensagens.CLIENT_ERROR_DEL.value() + ex.getMessage();
+            log.error("Erro ao deletar cliente: {}", ex.getMessage(), ex);
+        }
+
+        return ServiceResponse.builder()
+                .status(status)
+                .mensagem(mensagem)
+                .dados(null).build();
+    }
+
+    private ClienteDTO mapToDto(Clientes cliente) {
+        return ClienteDTO.builder()
+                .id(cliente.getId())
+                .nome(cliente.getNomeCliente())
+                .email(cliente.getEmailClient())
+                .telefone(cliente.getPhoneClient()).build();
     }
 }
+
