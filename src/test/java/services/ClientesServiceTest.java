@@ -50,7 +50,7 @@ class ClientesServiceTest {
     }
 
     @Test
-    void ClientesService_CreatePokemon_ReturnsResponseDto() {
+    void ClientesService_CreateClientes_ReturnsResponseDto() {
         when(repository.save(Mockito.any(Clientes.class))).thenReturn(cliente);
 
         ServiceResponse response = service.cadastrarClientes(clienteDTO);
@@ -80,7 +80,7 @@ class ClientesServiceTest {
     }
 
     @Test
-    void ClientesService_UpdatePokemon_ReturnPokemonDto() {
+    void ClientesService_UpdateClientes_ReturnClientesDto() {
         long id = 1;
         when(repository.findById(id)).thenReturn(Optional.ofNullable(cliente));
         when(repository.save(cliente)).thenReturn(cliente);
@@ -91,7 +91,7 @@ class ClientesServiceTest {
     }
 
     @Test
-    void ClientesService_DeletePokemonById_ReturnVoid() {
+    void ClientesService_DeleteClientesById_ReturnVoid() {
         long id = 1;
 
         when(repository.findById(id)).thenReturn(Optional.ofNullable(cliente));
