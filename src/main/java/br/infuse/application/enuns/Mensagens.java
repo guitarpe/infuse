@@ -35,7 +35,8 @@ public enum Mensagens {
     FILE_ERROR_INVALID_FILE("Arquivo inválido"),
     FILE_ERROR_CONVERT_FILE("Erro ao ler o arquivo de entrada"),
     FILE_ERROR_FILE_JSON_EMPTY("Arquivo está vazio"),
-    NO_RESULTS("Sem registros");
+    NO_RESULTS("Sem registros"),
+    ERROR("Erro: ");
 
     private final String value;
 

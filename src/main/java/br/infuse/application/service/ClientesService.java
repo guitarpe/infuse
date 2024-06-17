@@ -47,7 +47,6 @@ public class ClientesService {
         } catch (Exception ex) {
             status = false;
             mensagem = Mensagens.CLIENT_ERROR_SAVE.value() + ex.getMessage();
-            log.error("Erro ao cadastrar clientes: {}", ex.getMessage(), ex);
         }
 
         return ServiceResponse.builder()
@@ -68,8 +67,7 @@ public class ClientesService {
             clientes.add(mapToDto(cliente));
         } catch (Exception ex) {
             status = false;
-            mensagem = Mensagens.CLIENT_SUCCESS_FOUND.value() + ex.getMessage();
-            log.error("Erro ao consultar cliente: {}", ex.getMessage(), ex);
+            mensagem = Mensagens.CLIENT_ERROR_FOUND.value() + ex.getMessage();
         }
 
         return ServiceResponse.builder()
@@ -106,7 +104,6 @@ public class ClientesService {
         } catch (Exception ex) {
             status = false;
             mensagem = Mensagens.CLIENT_ERROR_LIST.value() + ex.getMessage();
-            log.error("Erro ao consultar clientes: {}", ex.getMessage(), ex);
         }
 
         return ServiceResponse.builder()
@@ -136,7 +133,6 @@ public class ClientesService {
         } catch (Exception ex) {
             status = false;
             mensagem = Mensagens.CLIENT_ERROR_UPDT.value() + ex.getMessage();
-            log.error("Erro ao atualizar clientes: {}", ex.getMessage(), ex);
         }
 
         return ServiceResponse.builder()
@@ -157,7 +153,6 @@ public class ClientesService {
         } catch (Exception ex) {
             status = false;
             mensagem = Mensagens.CLIENT_ERROR_DEL.value() + ex.getMessage();
-            log.error("Erro ao deletar cliente: {}", ex.getMessage(), ex);
         }
 
         return ServiceResponse.builder()
