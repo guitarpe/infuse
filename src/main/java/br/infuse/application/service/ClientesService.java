@@ -63,7 +63,7 @@ public class ClientesService {
 
         try {
             Clientes cliente = repository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.CLIENT_ERROR_FOUND.value()));
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
 
             clientes.add(mapToDto(cliente));
         } catch (Exception ex) {
@@ -94,7 +94,7 @@ public class ClientesService {
             content = listOfClientes.stream().map(this::mapToDto).collect(Collectors.toList());
 
             if (content.isEmpty())
-                throw new EntityNotFoundException(Mensagens.CLIENT_ERROR_LIST.value());
+                throw new EntityNotFoundException(Mensagens.NO_RESULTS.value());
 
             clientesResponse.setContent(content);
             clientesResponse.setPageNo(clientes.getNumber());
@@ -122,7 +122,7 @@ public class ClientesService {
 
         try {
             Clientes cliente = repository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.CLIENT_ERROR_UPDT.value()));
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
 
             cliente.setNomeCliente(objeto.getNome());
             cliente.setEmailClient(objeto.getEmail());
@@ -151,7 +151,7 @@ public class ClientesService {
 
         try {
             Clientes consulta = repository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.CLIENT_ERROR_DEL.value()));
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
 
             repository.delete(consulta);
         } catch (Exception ex) {

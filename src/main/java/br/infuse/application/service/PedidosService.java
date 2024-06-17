@@ -90,7 +90,7 @@ public class PedidosService {
             dataHoje = Utils.stringToLocalDate(Utils.pegarDataAtual());
 
             Pedidos pedido = repository.findByControle(controle)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.ORDER_ERROR_FOUND.value()));
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
 
             vOrder = getDiscountOrder(objeto, percDiscount, vTotal, pedido);
             pedido.setDtUpdate(dataHoje);
@@ -118,7 +118,7 @@ public class PedidosService {
 
         try {
             Pedidos pedido = repository.findByControle(controle)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.ORDER_ERROR_FOUND.value()));
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
 
             pedidos.add(mapToDto(pedido));
 
@@ -174,7 +174,7 @@ public class PedidosService {
 
         try {
             Pedidos consulta = repository.findByControle(controle)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.ORDER_ERROR_FOUND.value()));
+                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
 
             repository.delete(consulta);
 

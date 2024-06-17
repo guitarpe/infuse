@@ -34,7 +34,8 @@ public enum Mensagens {
     FILE_ERROR_FIELD_ORD_INVALID("Campos do pedido inválido."),
     FILE_ERROR_INVALID_FILE("Arquivo inválido"),
     FILE_ERROR_CONVERT_FILE("Erro ao ler o arquivo de entrada"),
-    FILE_ERROR_FILE_JSON_EMPTY("Arquivo está vazio");
+    FILE_ERROR_FILE_JSON_EMPTY("Arquivo está vazio"),
+    NO_RESULTS("Sem registros");
 
     private final String value;
 
