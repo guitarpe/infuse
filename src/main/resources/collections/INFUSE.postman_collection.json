@@ -139,7 +139,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/clientes",
+					"raw": "http://localhost:8080/api/clientes?page=1&size=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -148,6 +148,16 @@
 					"path": [
 						"api",
 						"clientes"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
 					]
 				}
 			},
