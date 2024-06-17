@@ -1,7 +1,7 @@
 package br.infuse.application.service;
 
 import br.infuse.application.dto.request.PedidoDTO;
-import br.infuse.application.dto.response.PedidosRespose;
+import br.infuse.application.dto.response.PagesRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
 import br.infuse.application.exception.CustomNotFoundException;
@@ -139,7 +139,7 @@ public class PedidosService {
         String mensagem = Mensagens.ORDER_SUCCESS_LIST.value();
         boolean status = true;
 
-        PedidosRespose pedidosResponse = new PedidosRespose();
+        PagesRespose pedidosResponse = new PagesRespose();
 
         try {
             Pageable pageable = PageRequest.of(page, size);

@@ -1,7 +1,7 @@
 package br.infuse.application.service;
 
 import br.infuse.application.dto.request.ClienteDTO;
-import br.infuse.application.dto.response.ClientesResponse;
+import br.infuse.application.dto.response.PagesRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
 import br.infuse.application.exception.CustomNotFoundException;
@@ -85,7 +85,7 @@ public class ClientesService {
         String mensagem = Mensagens.CLIENT_SUCCESS_LIST.value();
         boolean status = true;
 
-        ClientesResponse clientesResponse = new ClientesResponse();
+        PagesRespose clientesResponse = new PagesRespose();
 
         try {
             Pageable pageable = PageRequest.of(page, size);

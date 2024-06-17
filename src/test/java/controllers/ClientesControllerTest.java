@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.infuse.application.controller.ClientesController;
 import br.infuse.application.dto.request.ClienteDTO;
-import br.infuse.application.dto.response.ClientesResponse;
+import br.infuse.application.dto.response.PagesRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
 import br.infuse.application.service.ClientesService;
@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class ClientesControllerTest {
@@ -56,7 +57,7 @@ class ClientesControllerTest {
 
     @Test
     void ClientesController_GetAllClientes_ReturnResponseDto() throws Exception {
-        ClientesResponse cliRespIn = ClientesResponse.builder().pageSize(10).last(true).pageNo(1)
+        PagesRespose cliRespIn = PagesRespose.builder().pageSize(10).last(true).pageNo(1)
                 .content(Collections.singletonList(cliente)).build();
 
         ServiceResponse response = ServiceResponse.builder().dados(cliRespIn)
@@ -69,13 +70,14 @@ class ClientesControllerTest {
                 .param("page", "1")
                 .param("size", "10"));
 
-        ClientesResponse cliRespOut = (ClientesResponse) response.getDados();
+        PagesRespose cliRespOut = (PagesRespose) response.getDados();
+        List<ClienteDTO> listCliente = (List<ClienteDTO>) cliRespOut.getContent();
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", CoreMatchers.is(200)))
                 .andExpect(jsonPath("$.success", CoreMatchers.is(true)))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Mensagens.CLIENT_SUCCESS_LIST.value())))
-                .andExpect(jsonPath("$.data.content.size()", CoreMatchers.is(cliRespOut.getContent().size())));
+                .andExpect(jsonPath("$.data.content.size()", CoreMatchers.is(listCliente.size())));
     }
 
     @Test

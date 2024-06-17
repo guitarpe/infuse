@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.infuse.application.controller.PedidosController;
 import br.infuse.application.dto.request.PedidoDTO;
-import br.infuse.application.dto.response.PedidosRespose;
+import br.infuse.application.dto.response.PagesRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
 import br.infuse.application.service.ArquivosService;
@@ -23,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -36,6 +35,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class PedidosControllerTest {
@@ -125,7 +125,7 @@ class PedidosControllerTest {
     @Test
     void PedidosController_GetAllPedidos_ReturnResponseDto() throws Exception {
 
-        PedidosRespose pedRespIn = PedidosRespose.builder().pageSize(10).last(true).pageNo(1)
+        PagesRespose pedRespIn = PagesRespose.builder().pageSize(10).last(true).pageNo(1)
                 .content(Collections.singletonList(pedido)).build();
 
         ServiceResponse response = ServiceResponse.builder().dados(pedRespIn)
@@ -145,13 +145,14 @@ class PedidosControllerTest {
                 .param("preco", "10.0")
                 .param("qtde", "10"));
 
-        PedidosRespose pedRespOut = (PedidosRespose) response.getDados();
+        PagesRespose pedRespOut = (PagesRespose) response.getDados();
+        List<PedidoDTO> listPedidos = (List<PedidoDTO>) pedRespOut.getContent();
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", CoreMatchers.is(200)))
                 .andExpect(jsonPath("$.success", CoreMatchers.is(true)))
                 .andExpect(jsonPath("$.message", CoreMatchers.is(Mensagens.ORDER_SUCCESS_LIST.value())))
-                .andExpect(jsonPath("$.data.content.size()", CoreMatchers.is(pedRespOut.getContent().size())));
+                .andExpect(jsonPath("$.data.content.size()", CoreMatchers.is(listPedidos.size())));
     }
 
     @Test
