@@ -92,6 +92,7 @@ public class ClientesController {
     @PutMapping("/clientes/{id}/atualizar")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Cliente atualizado com sucesso"),
+            @ApiResponse(code = 404, message = "Cliente não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
     public ResponseEntity<SuccessResponse> atualizar(@RequestBody ClienteDTO cliente,
@@ -109,6 +110,7 @@ public class ClientesController {
     @DeleteMapping("/clientes/{id}/deletar")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Cliente deletado com sucesso"),
+            @ApiResponse(code = 404, message = "Cliente não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
     public ResponseEntity<SuccessResponse> deletar(@PathVariable("id") long id) throws NotFoundException {

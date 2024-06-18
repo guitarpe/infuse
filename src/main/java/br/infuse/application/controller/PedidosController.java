@@ -125,6 +125,7 @@ public class PedidosController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Pedido atualizado com sucesso"),
+            @ApiResponse(code = 404, message = "Pedido não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
     public ResponseEntity<SuccessResponse> atualizar(@RequestBody PedidoDTO pedido,
@@ -149,6 +150,7 @@ public class PedidosController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Pedido deletado com sucesso"),
+            @ApiResponse(code = 404, message = "Pedido não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
     public ResponseEntity<SuccessResponse> deletar(@PathVariable("controle") long controle) throws NotFoundException {
