@@ -4,7 +4,7 @@ import br.infuse.application.dto.request.PedidoDTO;
 import br.infuse.application.dto.response.PagesRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
-import br.infuse.application.exception.CustomNotFoundException;
+import br.infuse.application.exception.NotFoundException;
 import br.infuse.application.model.Pedidos;
 import br.infuse.application.repository.IPedidosRepository;
 import br.infuse.application.utils.Utils;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -76,10 +75,9 @@ public class PedidosService {
                 .dados(pedidos).build();
     }
 
-    public ServiceResponse atualizarPedido(PedidoDTO objeto, Long controle) {
+    public ServiceResponse atualizarPedido(PedidoDTO objeto, Long controle) throws NotFoundException {
         String mensagem = Mensagens.ORDER_SUCCESS_UPDT.value();
         List<PedidoDTO> pedidos = new ArrayList<>();
-        boolean status = true;
 
         try {
             LocalDate dataHoje;
@@ -90,7 +88,7 @@ public class PedidosService {
             dataHoje = Utils.stringToLocalDate(Utils.pegarDataAtual());
 
             Pedidos pedido = repository.findByControle(controle)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
+                    .orElseThrow(() -> new NotFoundException(Mensagens.NO_RESULTS.value()));
 
             vOrder = getDiscountOrder(objeto, percDiscount, vTotal, pedido);
             pedido.setDtUpdate(dataHoje);
@@ -101,43 +99,39 @@ public class PedidosService {
             pedidos.add(mapToDto(pedidoUpdt));
 
         } catch (Exception ex) {
-            status = false;
-            mensagem = ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(pedidos).build();
     }
 
-    public ServiceResponse consultarPedidoPorId(Long controle) {
+    public ServiceResponse consultarPedidoPorId(Long controle) throws NotFoundException {
         List<PedidoDTO> pedidos = new ArrayList<>();
         String mensagem = Mensagens.ORDER_SUCCESS_FOUND.value();
-        boolean status = true;
 
         try {
             Pedidos pedido = repository.findByControle(controle)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
+                    .orElseThrow(() -> new NotFoundException(Mensagens.NO_RESULTS.value()));
 
             pedidos.add(mapToDto(pedido));
 
         } catch (Exception ex) {
-            status = false;
-            mensagem = ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(pedidos).build();
     }
 
     public ServiceResponse consultarPedido(int page, int size, long pedido, LocalDate registro, Long cliente,
-                                           String produto, BigDecimal valor, Integer qtde) {
+                                           String produto, BigDecimal valor, Integer qtde) throws NotFoundException {
         List<PedidoDTO> content;
         String mensagem = Mensagens.ORDER_SUCCESS_LIST.value();
-        boolean status = true;
 
         PagesRespose pedidosResponse = new PagesRespose();
 
@@ -148,7 +142,7 @@ public class PedidosService {
             content = listOfPedidos.stream().map(this::mapToDto).collect(Collectors.toList());
 
             if (content.isEmpty())
-                throw new EntityNotFoundException(Mensagens.ORDER_ERROR_LIST.value());
+                throw new NotFoundException(Mensagens.ORDER_ERROR_LIST.value());
 
             pedidosResponse.setContent(content);
             pedidosResponse.setPageNo(pedidos.getNumber());
@@ -158,33 +152,30 @@ public class PedidosService {
             pedidosResponse.setLast(pedidos.isLast());
 
         } catch (Exception ex) {
-            status = false;
-            mensagem = ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(pedidosResponse).build();
     }
 
-    public ServiceResponse deletarPedido(Long controle) {
+    public ServiceResponse deletarPedido(Long controle) throws NotFoundException {
         String mensagem = Mensagens.ORDER_SUCCESS_DEL.value();
-        boolean status = true;
 
         try {
             Pedidos consulta = repository.findByControle(controle)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
+                    .orElseThrow(() -> new NotFoundException(Mensagens.NO_RESULTS.value()));
 
             repository.delete(consulta);
 
         } catch (Exception ex) {
-            status = false;
-            mensagem = ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(null).build();
     }

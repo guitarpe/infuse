@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import br.infuse.application.dto.request.ClienteDTO;
 import br.infuse.application.dto.response.ServiceResponse;
+import br.infuse.application.exception.NotFoundException;
 import br.infuse.application.model.Clientes;
 import br.infuse.application.repository.IClientesRepository;
 import br.infuse.application.service.ClientesService;
@@ -59,7 +60,7 @@ class ClientesServiceTest {
     }
 
     @Test
-    void ClientesService_GetAllClientes_ReturnsResponseDto() {
+    void ClientesService_GetAllClientes_ReturnsResponseDto() throws NotFoundException {
         Page<Clientes> clientes = Mockito.mock(Page.class);
 
         when(repository.findAll(Mockito.any(Pageable.class))).thenReturn(clientes);
@@ -70,7 +71,7 @@ class ClientesServiceTest {
     }
 
     @Test
-    void ClientesService_FindById_ReturnResponseDto() {
+    void ClientesService_FindById_ReturnResponseDto() throws NotFoundException {
         long id = 1;
         when(repository.findById(id)).thenReturn(Optional.ofNullable(cliente));
 
@@ -80,7 +81,7 @@ class ClientesServiceTest {
     }
 
     @Test
-    void ClientesService_UpdateClientes_ReturnClientesDto() {
+    void ClientesService_UpdateClientes_ReturnClientesDto() throws NotFoundException {
         long id = 1;
         when(repository.findById(id)).thenReturn(Optional.ofNullable(cliente));
         when(repository.save(cliente)).thenReturn(cliente);

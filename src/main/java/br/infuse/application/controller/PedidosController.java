@@ -4,6 +4,7 @@ import br.infuse.application.dto.request.PedidoDTO;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.dto.response.SuccessResponse;
 import br.infuse.application.enuns.Mensagens;
+import br.infuse.application.exception.NotFoundException;
 import br.infuse.application.service.ArquivosService;
 import br.infuse.application.service.PedidosService;
 import io.swagger.annotations.ApiResponse;
@@ -79,7 +80,7 @@ public class PedidosController {
                                                    @RequestParam(value = "cliente", required = false) Long cliente,
                                                    @RequestParam(value = "produto", required = false) String produto,
                                                    @RequestParam(value = "preco", required = false) BigDecimal preco,
-                                                   @RequestParam(value = "qtde", required = false) Integer qtde) {
+                                                   @RequestParam(value = "qtde", required = false) Integer qtde) throws NotFoundException {
 
         ServiceResponse retorno = service.consultarPedido(page, size, pedido, data, cliente, produto, preco, qtde);
 
@@ -103,7 +104,7 @@ public class PedidosController {
             @ApiResponse(code = 404, message = "Pedido não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> pedido(@PathVariable long controle) {
+    public ResponseEntity<SuccessResponse> pedido(@PathVariable long controle) throws NotFoundException {
 
         ServiceResponse retorno = service.consultarPedidoPorId(controle);
 
@@ -127,7 +128,7 @@ public class PedidosController {
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
     public ResponseEntity<SuccessResponse> atualizar(@RequestBody PedidoDTO pedido,
-                                                     @PathVariable("controle") long controle) {
+                                                     @PathVariable("controle") long controle) throws NotFoundException {
 
         ServiceResponse retorno = service.atualizarPedido(pedido, controle);
 
@@ -150,7 +151,7 @@ public class PedidosController {
             @ApiResponse(code = 200, message = "Pedido deletado com sucesso"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> deletar(@PathVariable("controle") long controle) {
+    public ResponseEntity<SuccessResponse> deletar(@PathVariable("controle") long controle) throws NotFoundException {
 
         ServiceResponse retorno = service.deletarPedido(controle);
 

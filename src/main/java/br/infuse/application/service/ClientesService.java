@@ -4,7 +4,7 @@ import br.infuse.application.dto.request.ClienteDTO;
 import br.infuse.application.dto.response.PagesRespose;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.enuns.Mensagens;
-import br.infuse.application.exception.CustomNotFoundException;
+import br.infuse.application.exception.NotFoundException;
 import br.infuse.application.model.Clientes;
 import br.infuse.application.repository.IClientesRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,33 +54,30 @@ public class ClientesService {
                 .dados(clientes).build();
     }
 
-    public ServiceResponse consultarClientePorId(Long id) {
+    public ServiceResponse consultarClientePorId(Long id) throws NotFoundException {
         String mensagem = Mensagens.CLIENT_SUCCESS_FOUND.value();
         List<ClienteDTO> clientes = new ArrayList<>();
-        boolean status = true;
 
         try {
             Clientes cliente = repository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
+                    .orElseThrow(() -> new NotFoundException(Mensagens.NO_RESULTS.value()));
 
             clientes.add(mapToDto(cliente));
         } catch (Exception ex) {
-            status = false;
-            mensagem = Mensagens.CLIENT_ERROR_FOUND.value() + ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(clientes).build();
     }
 
-    public ServiceResponse consultarClientes(int page, int size) {
+    public ServiceResponse consultarClientes(int page, int size) throws NotFoundException {
 
         List<ClienteDTO> content;
 
         String mensagem = Mensagens.CLIENT_SUCCESS_LIST.value();
-        boolean status = true;
 
         PagesRespose clientesResponse = new PagesRespose();
 
@@ -92,7 +88,7 @@ public class ClientesService {
             content = listOfClientes.stream().map(this::mapToDto).collect(Collectors.toList());
 
             if (content.isEmpty())
-                throw new EntityNotFoundException(Mensagens.NO_RESULTS.value());
+                throw new NotFoundException(Mensagens.NO_RESULTS.value());
 
             clientesResponse.setContent(content);
             clientesResponse.setPageNo(clientes.getNumber());
@@ -102,24 +98,22 @@ public class ClientesService {
             clientesResponse.setLast(clientes.isLast());
 
         } catch (Exception ex) {
-            status = false;
-            mensagem = Mensagens.CLIENT_ERROR_LIST.value() + ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(clientesResponse).build();
     }
 
-    public ServiceResponse atualizarClientes(ClienteDTO objeto, Long id) {
+    public ServiceResponse atualizarClientes(ClienteDTO objeto, Long id) throws NotFoundException {
         String mensagem = Mensagens.CLIENT_SUCCESS_UPDT.value();
         List<ClienteDTO> clientes = new ArrayList<>();
-        boolean status = true;
 
         try {
             Clientes cliente = repository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
+                    .orElseThrow(() -> new NotFoundException(Mensagens.NO_RESULTS.value()));
 
             cliente.setNomeCliente(objeto.getNome());
             cliente.setEmailClient(objeto.getEmail());
@@ -131,32 +125,29 @@ public class ClientesService {
             clientes.add(mapToDto(clienteUpdt));
 
         } catch (Exception ex) {
-            status = false;
-            mensagem = Mensagens.CLIENT_ERROR_UPDT.value() + ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(clientes).build();
     }
 
-    public ServiceResponse deletarClientes(Long id) {
+    public ServiceResponse deletarClientes(Long id) throws NotFoundException {
         String mensagem = Mensagens.CLIENT_SUCCESS_DEL.value();
-        boolean status = true;
 
         try {
             Clientes consulta = repository.findById(id)
-                    .orElseThrow(() -> new CustomNotFoundException(Mensagens.NO_RESULTS.value()));
+                    .orElseThrow(() -> new NotFoundException(Mensagens.NO_RESULTS.value()));
 
             repository.delete(consulta);
         } catch (Exception ex) {
-            status = false;
-            mensagem = Mensagens.CLIENT_ERROR_DEL.value() + ex.getMessage();
+            throw ex;
         }
 
         return ServiceResponse.builder()
-                .status(status)
+                .status(true)
                 .mensagem(mensagem)
                 .dados(null).build();
     }

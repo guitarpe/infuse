@@ -2,18 +2,16 @@ package services;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import br.infuse.application.dto.request.PedidoDTO;
 import br.infuse.application.dto.response.ServiceResponse;
-import br.infuse.application.enuns.Mensagens;
+import br.infuse.application.exception.NotFoundException;
 import br.infuse.application.model.Clientes;
 import br.infuse.application.model.Pedidos;
 import br.infuse.application.repository.IClientesRepository;
@@ -80,7 +78,7 @@ class PedidosServiceTest {
     }
 
     @Test
-    void PedidosService_GetAllPedidos_ReturnResponseDto() {
+    void PedidosService_GetAllPedidos_ReturnResponseDto() throws NotFoundException {
         Page<Pedidos> pedidos = Mockito.mock(Page.class);
 
         lenient().when(repository.findAll(Mockito.any(Pageable.class))).thenReturn(pedidos);
@@ -92,7 +90,7 @@ class PedidosServiceTest {
     }
 
     @Test
-    void PedidosService_FindById_ReturnResponseDto() {
+    void PedidosService_FindById_ReturnResponseDto() throws NotFoundException {
         long id = 1;
         lenient().when(repository.findById(id)).thenReturn(Optional.ofNullable(pedido));
 
@@ -102,7 +100,7 @@ class PedidosServiceTest {
     }
 
     @Test
-    void PedidosService_UpdatePedido_ReturnResponseDto() {
+    void PedidosService_UpdatePedido_ReturnResponseDto() throws NotFoundException {
         long id = 1;
         lenient().when(repository.findById(id)).thenReturn(Optional.ofNullable(pedido));
         lenient().when(repository.save(pedido)).thenReturn(pedido);
@@ -113,7 +111,7 @@ class PedidosServiceTest {
     }
 
     @Test
-    void PedidosService_DeletePedidoById_ReturnVoid() {
+    void PedidosService_DeletePedidoById_ReturnVoid() throws NotFoundException {
         long id = 1;
 
         when(repository.findByControle(id)).thenReturn(Optional.of(pedido));

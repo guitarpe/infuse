@@ -3,6 +3,7 @@ package br.infuse.application.controller;
 import br.infuse.application.dto.request.ClienteDTO;
 import br.infuse.application.dto.response.ServiceResponse;
 import br.infuse.application.dto.response.SuccessResponse;
+import br.infuse.application.exception.NotFoundException;
 import br.infuse.application.service.ClientesService;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -34,13 +35,9 @@ public class ClientesController {
     })
     public ResponseEntity<SuccessResponse> clientes(
             @RequestParam(value="page", defaultValue="0", required=false) int page,
-            @RequestParam(value="size", defaultValue="10", required=false) int size) {
+            @RequestParam(value="size", defaultValue="10", required=false) int size) throws NotFoundException {
 
         ServiceResponse retorno = service.consultarClientes(page, size);
-
-        if(!retorno.isStatus()) {
-            throw new EntityNotFoundException(retorno.getMensagem());
-        }
 
         return ResponseEntity.ok().body(SuccessResponse.builder()
                 .code(200)
@@ -59,12 +56,8 @@ public class ClientesController {
             @ApiResponse(code = 404, message = "Cliente não encontrado"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> cliente(@PathVariable long id) {
+    public ResponseEntity<SuccessResponse> cliente(@PathVariable long id) throws NotFoundException {
         ServiceResponse retorno = service.consultarClientePorId(id);
-
-        if(!retorno.isStatus()) {
-            throw new EntityNotFoundException(retorno.getMensagem());
-        }
 
         return ResponseEntity.ok().body(SuccessResponse.builder()
                 .code(200)
@@ -102,12 +95,8 @@ public class ClientesController {
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
     public ResponseEntity<SuccessResponse> atualizar(@RequestBody ClienteDTO cliente,
-                                                     @PathVariable("id") long id) {
+                                                     @PathVariable("id") long id) throws NotFoundException {
         ServiceResponse retorno = service.atualizarClientes(cliente, id);
-
-        if(!retorno.isStatus()) {
-            throw new EntityNotFoundException(retorno.getMensagem());
-        }
 
         return ResponseEntity.ok().body(SuccessResponse.builder()
                 .code(200)
@@ -122,13 +111,9 @@ public class ClientesController {
             @ApiResponse(code = 200, message = "Cliente deletado com sucesso"),
             @ApiResponse(code = 500, message = "Erro interno do servidor")
     })
-    public ResponseEntity<SuccessResponse> deletar(@PathVariable("id") long id) {
+    public ResponseEntity<SuccessResponse> deletar(@PathVariable("id") long id) throws NotFoundException {
 
         ServiceResponse retorno = service.deletarClientes(id);
-
-        if(!retorno.isStatus()) {
-            throw new EntityNotFoundException(retorno.getMensagem());
-        }
 
         return ResponseEntity.ok().body(SuccessResponse.builder()
                 .code(200)
